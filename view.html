@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>AngularJS入门学习</title>
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/angular-route.js"></script>
+</head>
+<body>
+<div ng-controller="myCtrl">
+    <ul>
+        <li><a href="#/a">click a</a></li>
+        <li><a href="#/b">click b</a></li>
+    </ul>
+    <div ng-view >
+        <!--待渲染的视图-->
+    </div>
+</div>
+<script type="text/javascript">
+    angular.module("myApp",["ngRoute"])
+        .controller("aController",function($scope,$route){
+            $scope.hello = "hello,我是a!";
+        })
+        .controller("bController",function($scope){
+            $scope.hello = "hello,我是b，延迟 了1秒才显示!";
+        })
+        .controller("myCtrl",function($scope,$location){
+
+            $scope.$on("$viewContentLoaded",function(){ //当新的URL加载完成后，通知myCtrl
+                console.log("ng-view content loaded!");
+            });
+
+            $scope.$on("$routeChangeStart",function(event,next,current){ //当URL发生改变时，通知myCtrl
+                //event.preventDefault(); //cancel url change
+                console.log("route change start!");
+            });
+        })
+        .config(function($routeProvider, $locationProvider) {
+            $routeProvider
+                .when('/a', {
+                    templateUrl: 'a.html',
+                    controller: 'aController'
+                })
+                .when('/b', {
+                    templateUrl: 'b.html',
+                    controller: 'bController',
+                    resolve: {
+                        // 延迟 1秒再跳转
+                        delay: function($q, $timeout) {
+                            var delay = $q.defer();
+                            $timeout(delay.resolve, 3000);
+                            return delay.promise;
+                        }
+                    }
+                })
+                .otherwise({
+                    redirectTo: '/'
+                });
+        });
+</script>
+<script type='text/ng-template' id='a.html'>
+    <div><h1>{{hello}}</h1></div>
+</script>
+<script type='text/ng-template' id='b.html'>
+    <div><h1>{{hello}}</h1></div>
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/angular.js"></script>
+</head>
+<body>
+
+    <div ng-controller="hrefController">
+        <a ng-href="{{myHref}}">百度</a>
+    </div>
+
+    <script>
+        var app = angular.module('app',[]);
+        app.controller('hrefController',function ($scope) {
+            $scope.myHref = "https://github.com/"
+        })
+
+    </script>
+</body>
+</html>

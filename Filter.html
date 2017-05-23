@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app="my" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>liuyao</title>
+    <script src="js/angular_old.js"></script>
+</head>
+<body>
+    <div ng-controller="myController">
+        {{ display | FirstUpper }}
+    </div>
+
+    <a ng-href="www.baidu.com">a</a>
+
+<script>
+    var app = angular.module("my",[])
+    app.controller('myController',function ($scope) {
+        $scope.display = 'liuyao is a man'
+    })
+
+    app.filter('FirstUpper',function () {
+        return function (input) {
+            return input[0].toUpperCase() + input.slice(1)
+        }
+    })
+    
+</script>
+
+</body>
+</html>
